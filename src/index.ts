@@ -78,6 +78,8 @@ window.Webflow.push(() => {
   onAuthStateChanged(auth, (user) => {
     if (user && bodyUnauth) {
       window.location.href = webflowAuth.loginRedirectPath;
+      const welcomeMessage = document.getElementById('welcome-message');
+      welcomeMessage.textContent = `Welcome ${user.email}`;
     } else if (!user && bodyAuth) {
       window.location.href = webflowAuth.loginPath;
     }
@@ -96,8 +98,7 @@ window.Webflow.push(() => {
         el.style.display = null;
       });
     }
-    const welcomeMessage = document.getElementById('welcome-message');
-    welcomeMessage.textContent = `Welcome ${user.email}`;
+    
   });
   // Logout
   const authLogout = document.querySelectorAll('[data-logout]');
