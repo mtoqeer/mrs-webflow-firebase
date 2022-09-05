@@ -26,6 +26,7 @@ window.Webflow.push(() => {
   // const userEmail = document.querySelectorAll('[data-user-email]');
   // const userContent = document.querySelectorAll('[data-user]');
 
+
   userAuth.forEach(function (el) {
     el.style.display = 'none';
   });
@@ -95,6 +96,8 @@ window.Webflow.push(() => {
         el.style.display = null;
       });
     }
+    const welcomeMessage = document.getElementById('welcome-message');
+    welcomeMessage.textContent = `Welcome ${user.email}`;
   });
   // Logout
   const authLogout = document.querySelectorAll('[data-logout]');
