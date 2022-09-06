@@ -1,13 +1,35 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck ignores all ts errors in the file
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import {
-  getAuth,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  getAuth,
 } from 'firebase/auth';
 
 import { webflowAuth } from '$utils/config';
+import {
+  bodyAuth,
+  bodyUnauth,
+  userAuth,
+  userUnauth,
+  signupForms,
+  signupErrors,
+  signupLoading,
+  signupEmail,
+  signupPassword,
+  loginForms,
+  loginErrors,
+  loginLoading,
+  loginEmail,
+  loginPassword,
+  authLogout,
+  userEmail,
+  userID,
+} from '$utils/ui';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
@@ -16,15 +38,16 @@ window.Webflow.push(() => {
 
   // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
-  const user = auth.currentUser;
+  // const user = auth.currentUser;
 
-  const bodyAuth = document.body.getAttribute('data-user-auth');
-  const bodyUnauth = document.body.getAttribute('data-user-unauth');
-  const userAuth = document.querySelectorAll('[data-user-auth]');
-  const userUnauth = document.querySelectorAll('[data-user-unauth]');
-  // const userDisplayName = document.querySelectorAll('[data-user-displayName]');
-  // const userEmail = document.querySelectorAll('[data-user-email]');
-  // const userContent = document.querySelectorAll('[data-user]');
+  onAuthStateChanged(auth, (user) => {
+    if (user !== null) {
+      if(userEmail !== null || userID !== null){
+        userEmail.textContent = `${user.email}`;
+        userID.textContent = `${user.uid}`;
+      }
+    }
+  });
 
   userAuth.forEach(function (el) {
     el.style.display = 'none';
@@ -34,14 +57,8 @@ window.Webflow.push(() => {
   });
 
   // Signup
-  const signupForms = document.querySelectorAll('[data-signup-form]');
-  const signupErrors = document.querySelectorAll('[data-signup-error]');
-  const signupLoading = document.querySelectorAll('[data-signup-loading]');
 
   signupForms.forEach(function (el) {
-    const signupEmail = el.querySelector('[data-signup-email]');
-    const signupPassword = el.querySelector('[data-signup-password]');
-
     el.addEventListener('submit', function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -95,13 +112,42 @@ window.Webflow.push(() => {
         el.style.display = null;
       });
     }
-    const welcomeMessage = document.getElementById('welcome-message');
-    if (user !== null) {
-      welcomeMessage.textContent = `Welcome ${user.email}`;
-    }
   });
+
+  // Sign-in
+
+  loginForms.forEach(function (el) {
+    // On Login Submit
+    el.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      loginErrors.forEach(function (el) {
+        el.style.display = 'none';
+      });
+      loginLoading.forEach(function (el) {
+        el.style.display = 'block';
+      });
+      signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          window.location.href = webflowAuth.loginRedirectPath;
+        })
+        .catch((error) => {
+          loginErrors.forEach(function (el) {
+            el.innerText = error.message;
+            el.style.display = 'block';
+          });
+        });
+
+      setTimeout(function () {
+        loginLoading.forEach(function (el) {
+          el.style.display = 'none';
+        });
+      }, 1000);
+    });
+  });
+
   // Logout
-  const authLogout = document.querySelectorAll('[data-logout]');
   authLogout.forEach(function (el) {
     el.addEventListener('click', function (e) {
       e.preventDefault();

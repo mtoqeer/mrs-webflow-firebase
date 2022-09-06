@@ -10,6 +10,7 @@ export const webflowAuth = {
   signupPath: '/sign-up',
   signupRedirectPath: '/user',
   logoutRedirectPath: '/',
+  passwordResetPath: '/password-reset',
   firebaseConfig: {
     apiKey: 'AIzaSyBhNFLNzExqkp9dSV3gc38LiLqE2ga98XU',
     authDomain: 'mrs-webflow.firebaseapp.com',
