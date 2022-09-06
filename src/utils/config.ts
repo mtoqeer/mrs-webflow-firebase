@@ -5,9 +5,9 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export const webflowAuth = {
-  loginPath: '/log-in',
+  loginPath: '/login',
   loginRedirectPath: '/user',
-  signupPath: '/sign-up',
+  signupPath: '/signup',
   signupRedirectPath: '/user',
   logoutRedirectPath: '/',
   passwordResetPath: '/password-reset',
