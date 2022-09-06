@@ -42,7 +42,7 @@ window.Webflow.push(() => {
 
   onAuthStateChanged(auth, (user) => {
     if (user !== null) {
-      if(userEmail !== null || userID !== null){
+      if (userEmail !== null || userID !== null) {
         userEmail.textContent = `${user.email}`;
         userID.textContent = `${user.uid}`;
       }
